@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcServer";
+
+package book;
+
+service Book{
+	rpc AddBook(AddBookRequest) returns (AddBookResponse);
+	rpc GetBookById(GetBookByIdRequest) returns (GetBookResponse);
+	rpc GetBooks(GetBooksRequest) returns (GetBooksResponse);
+	rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse);
+	rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse);
+}
+
+message GetBookByIdRequest {
+	int32 id = 1;
+}
+
+message GetBookResponse {
+	BookModel book = 1;
+}
+
+message GetBooksRequest {
+	int32 limit = 1;
+	int32 offset = 2;
+}
+
+message GetBooksResponse {
+	repeated BookModel book = 1;
+}
+
+message UpdateBookRequest {
+	BookModel book = 1;
+}
+
+message UpdateBookResponse {
+	bool is_success = 1;
+}
+
+message DeleteBookRequest {
+	int32 id = 1;
+}
+
+message DeleteBookResponse {
+	bool is_success = 1;
+}
+
+message AddBookRequest {
+	BookModel book = 1;
+}
+
+message AddBookResponse {
+	int32 book_id = 1;
+}
+
+message BookModel {
+	int32 id = 1;
+	string title = 2;
+	string author = 3;
+	int32 published_year = 4;
+}
