@@ -1,2 +1,2 @@
 # gRPC-Project
-gRPC project that is written in C#.
+Sample gRPC project that is written in C#.
