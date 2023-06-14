@@ -6,6 +6,7 @@ var channel = GrpcChannel.ForAddress("http://localhost:5086", new GrpcChannelOpt
 {
     Credentials = ChannelCredentials.Insecure
 });
+
 //we have to get an object from our service
 var client = new Book.BookClient(channel);
 
@@ -13,7 +14,7 @@ var addBookRequest = new AddBookRequest()
 {
     Book = new BookModel()
     {
-        Id = 2,
+        Id = 1,
         Author = "J.K.Rowling",
         Title = "Harry Potter",
         PublishedYear = 1990,
@@ -22,9 +23,9 @@ var addBookRequest = new AddBookRequest()
 var reply = await client.AddBookAsync(addBookRequest);
 Console.WriteLine(reply.BookId);
 
-var getBookRequest = new GetBookByIdRequest { Id= 1 };
-var getBookReply = await client.GetBookByIdAsync(getBookRequest);
-Console.WriteLine($"Title: {getBookReply.Book.Title} \nAuthor {getBookReply.Book.Author}");
+//! Returns List of books
+var getBookRequest = new GetBooksRequest();
+var getBookReply = await client.GetBooksAsync(getBookRequest);
+Console.WriteLine(getBookReply);
 
 Console.ReadLine();
-

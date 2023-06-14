@@ -1,0 +1,2 @@
+obj\Release\net6.0\Protos/Book.cs \
+obj\Release\net6.0\Protos/BookGrpc.cs: Protos/book.proto

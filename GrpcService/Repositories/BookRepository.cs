@@ -1,58 +1,34 @@
-﻿namespace GrpcServer.Repositories;
+﻿using GrpcServer.Data;
+
+namespace GrpcServer.Repositories;
 public class BookRepository : IBookRepository
 {
-    private readonly List<BookModel> _books;
-
-    public BookRepository()
-    {
-        _books = new List<BookModel>();
-        
-        _books.Add(new BookModel()
-        {
-            Id = 1,
-            Author = "Akrom Malik",
-            Title = "Halqa",
-            PublishedYear = 2021,
-        });
-    }
+    private readonly AppDbContext _context;
+    public BookRepository(AppDbContext context)
+        => _context = context;
 
     public int AddBook(BookModel book)
     {
-        _books.Add(book);
+        _context.Books.Add(book);
+        _context.SaveChanges();
         return book.Id;
     }
 
-    public bool DeleteBookById(int id)
-    {
-        var book = _books.FirstOrDefault(b => b.Id == id);
-
-        if (book != null)
-        {
-            _books.Remove(book);
-            return true;
-        }
-
-        return false;
-    }
-
     public List<BookModel> GetBooks()
-    {
-        return this._books;
-    }
+        => _context.Books.ToList();
 
     public BookModel GetBookById(int id)
     {
-        var book = _books.FirstOrDefault(b => b.Id == id);
+        var book = _context.Books.FirstOrDefault(b => b.Id == id);
 
-        if (book == null)
-            throw new Exception("Entity was not found");
+        if (book is null)
+            return null;
 
         return book;
     }
-
     public bool UpdateBook(int id, BookModel book)
     {
-        var existingBook = _books.FirstOrDefault(b => b.Id == id);
+        var existingBook = GetBookById(id);
         if (existingBook != null)
         {
             existingBook.Title = book.Title;
@@ -60,7 +36,18 @@ public class BookRepository : IBookRepository
             existingBook.PublishedYear = book.PublishedYear;
             return true;
         }
+        return false;
+    }
 
+    public bool DeleteBookById(int id)
+    {
+        var book = GetBookById(id);
+
+        if (book != null)
+        {
+            _context.Books.Remove(book);
+            return true;
+        }
         return false;
     }
 }
